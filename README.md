@@ -1,2 +1,3 @@
 # Reddit-Clairvoyance
-using OSINT techniques to gain insight and foresight into potential cyber threats and attacks originating from Reddit.
+USing OSINT Techniques To learn about Cyber Attack Rates
+and gtheirng intrest in the top users and malacios actors and posts using a Natrual Language Analyzaer
