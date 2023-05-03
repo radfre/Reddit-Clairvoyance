@@ -1,7 +1,8 @@
 
 ## read Credentials File
 
-##login using credetials
+##login
+
 
 ## Begin API
 
