@@ -19,8 +19,7 @@ class RedditAPI:
                                self.reddit.subreddit('threatintelligence'), self.reddit.subreddit('cybercrime'),
                                self.reddit.subreddit('antivirus'), self.reddit.subreddit('websecurity'),
                                self.reddit.subreddit('blackhat'), self.reddit.subreddit('infosecurity'),
-                               self.reddit.subreddit('Privacy'), self.reddit.subreddit('Information_Security'),
-                               self.reddit.subreddit('netdef'), self.reddit.subreddit('intelligence'),
+                               self.reddit.subreddit('Privacy'), self.reddit.subreddit('Information_Security'), self.reddit.subreddit('intelligence'),
                                self.reddit.subreddit('ComputerSecurity')]
 
 
