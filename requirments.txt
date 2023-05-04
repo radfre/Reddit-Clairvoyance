@@ -1,0 +1,12 @@
+from collections import Counter
+import re
+from nameparser import HumanName
+import nltk
+
+import tkinter as tk
+import praw
+
+
+import praw
+from Read import Read
+from Postmanager import Postmanager
