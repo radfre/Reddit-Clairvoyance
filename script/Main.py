@@ -1,5 +1,6 @@
 from RedditAPI import RedditAPI
 from GUI import GUI
+from Postmanager import Postmanager
 
 ## read Credentials File
 
@@ -12,10 +13,11 @@ reddit = RedditAPI()
 ##initialize GUI
 Display = GUI()
 
-## begin Reddit API
-TopPosts = reddit.topofall()
+## Get Posts
+Postmanager = reddit.GetPosts()
 
-
+print(Postmanager.Mentions())
+print(Postmanager.TopBreachPost())
+print(Postmanager.TopCyberPost())
 ##GUI
 
-Display.display_top_posts(TopPosts)
