@@ -2,6 +2,7 @@ from collections import Counter
 import re
 from nameparser import HumanName
 import nltk
+
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from textblob import TextBlob
@@ -24,8 +25,8 @@ class Postmanager:
                                      "Advanced persistent threat", "Cyber espionage", "Social engineering attack",
                                      "Cyber warfare"]
 
-    def add_posts(self, Number, Subreddit, Title, Desc, Points, User):
-        self.posts.append(Post(Number, Subreddit, Title, Desc, Points, User))
+    def add_posts(self, Number, Subreddit, Title, Desc, Points, Link, User):
+        self.posts.append(Post(Number, Subreddit, Title, Desc, Points, Link, User))
 
     def add_User(self, Username, Points):
         self.users.append(User(Username, Points))
@@ -54,14 +55,24 @@ class Postmanager:
                         any(synonym in post.title or synonym in post.desc for synonym in self.breach_synonyms)]
         sorted_breach_posts = sorted(breach_posts, key=lambda post: post.points, reverse=True)
         top_breach_posts = sorted_breach_posts[:2]
-        return f"The top 2 posts with 'Breach' in the title or description are: \n1. {top_breach_posts[0].title} with {top_breach_posts[0].points} points\n2. {top_breach_posts[1].title} with {top_breach_posts[1].points} points"
+        if not top_breach_posts:
+            return "No posts found with 'Breach' in the title or description."
+        elif len(top_breach_posts) == 1:
+            return f"The top post with 'Breach' in the title or description has {top_breach_posts[0].points} points:\n\n titled: {top_breach_posts[0].title}\n desc:{top_breach_posts[0].desc}\n\n\tReddit Link: {top_breach_posts[0].link}."
+        else:
+            return f"The top 2 posts with 'Breach' in the title or description are:\n\n\n1. {top_breach_posts[0].title}\nPoints: {top_breach_posts[0].points} \ndesc:{top_breach_posts[0].desc}\n\n\tReddit Link {top_breach_posts[0].link}\n\n\n\n2.\n {top_breach_posts[1].title}\n Points: {top_breach_posts[1].points} \ndesc:{top_breach_posts[1].desc}\n\nLink: {top_breach_posts[1].link}. "
 
-    def TopCyberPost(self):
+    def TopCyberPosts(self):
         cyber_posts = [post for post in self.posts if
                        any(synonym in post.title or synonym in post.desc for synonym in self.cyberattack_synonyms)]
-        top_cyber_post = max(cyber_posts, key=lambda post: post.points)
-        return f"The top post with 'Cyber' in the title or description has {top_cyber_post.points} \n\tpoints and is " \
-               f"titled:   {top_cyber_post.title}. "
+        sorted_cyber_posts = sorted(cyber_posts, key=lambda post: post.points, reverse=True)
+        top_cyber_posts = sorted_cyber_posts[:2]
+        if not top_cyber_posts:
+            return "No posts found with 'Cyber' in the title or description."
+        elif len(top_cyber_posts) == 1:
+            return f"The top post with 'Cyber' in the title or description has {top_cyber_posts[0].points} points:\n titled: {top_cyber_posts[0].title}\n desc:{top_cyber_posts[0].desc}\n\n\tReddit Link {top_cyber_posts[0].link}."
+        else:
+            return f"The top 2 posts with 'Cyber' in the title or description are:\n\n\n1. {top_cyber_posts[0].title}\nPoints: {top_cyber_posts[0].points} \ndesc:{top_cyber_posts[0].desc}\n\n\tReddit Link {top_cyber_posts[0].link}\n\n\n\n2.\n {top_cyber_posts[1].title}\n Points: {top_cyber_posts[1].points} \ndesc:{top_cyber_posts[1].desc}\n\nLink: {top_cyber_posts[1].link}. "
 
     def TopUser(self):
         top_user = max(self.users, key=lambda user: user.points)
@@ -76,8 +87,9 @@ class Postmanager:
         bad_words = {'bad'}
         filtered_words = [word for word in words if word not in common_words and word not in bad_words]
         common_filtered_words = Counter(filtered_words).most_common(25)
-
-        return [word[0] for word in common_filtered_words]
+        final =[word[0] for word in common_filtered_words]
+        final[:0] = ['Most Common Words\n']
+        return final
 
     def affected_orgs(self):
         orgs = set()
@@ -87,12 +99,10 @@ class Postmanager:
                 # and add them to the set
                 orgs.update([str(HumanName(org.strip())) for org in
                              re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title)])
-            if 'cyber' in post.title.lower() or 'cyber' in post.desc.lower():
-                # Identify affected organizations from the post's description or title
-                # and add them to the set
-                orgs.update([str(HumanName(org.strip())) for org in
-                             re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title)])
-        return list(orgs)
+
+        final = list(orgs)
+        final[:0] = ['Affected Organizations\n']
+        return final
 
     from textblob import TextBlob
 
@@ -101,17 +111,22 @@ class Postmanager:
         for post in self.posts:
             blob = TextBlob(post.desc)
             sentiment = blob.sentiment.polarity
-            sentiments.append((post.title, post.desc, sentiment))
-        top_5 = sorted(sentiments, key=lambda x: x[2], reverse=True)[:5]
-        return 'The top 5 most aggressive posts are: \n' + '\n'.join(
-            [f'Title: {post[0]}\nDescription: {post[1]}\nSentiment: {post[2]}' for post in top_5])
+            sentiments.append((post.title, post.desc, sentiment, post.link))
+        top_5 = sorted(sentiments, key=lambda x: x[2])[:5]
+        output = 'The top 5 most negative posts using Sentiment Analysis and Natural Language Processing:\n\n\n'
+        for i, post in enumerate(top_5):
+            output += f'{i + 1}. \tTitle: {post[0]}\n\nDescription: {post[1]}\n\n\tSentiment: {post[2]}\n\tLink: {post[3]}\n\n\n\n'
+        return output
+
 
 class Post:
-    def __init__(self, Number, Subreddit, Title, Desc, Points, Username):
+    def __init__(self, Number, Subreddit, Title, Desc,
+                 Link, Points, Username):
         self.number = Number
         self.subreddit = Subreddit
         self.title = Title
         self.desc = Desc
+        self.link = Link
         self.points = Points
         self.user = Username
 

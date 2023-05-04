@@ -22,22 +22,22 @@ class RedditAPI:
             self.subreddits = [self.reddit.subreddit('cybersecurity'), self.reddit.subreddit('netsec'),
                                self.reddit.subreddit('hacking'), self.reddit.subreddit('malware'),
                                self.reddit.subreddit('threatintelligence'), self.reddit.subreddit('cybercrime'),
-                               self.reddit.subreddit('antivirus')]
+                               self.reddit.subreddit('antivirus'), self.reddit.subreddit('security'), self.reddit.subreddit('Privacy'), self.reddit.subreddit('Information_Security'), self.reddit.subreddit('ComputerSecurity')]
 
 
 
-    def GetPosts(self, limit=20, time_filter='month'):
+    def GetPosts(self, limit=1000, time_filter='month'):
         manager = Postmanager()
         PostNum = 0
         for subreddit in self.subreddits:
             top_subreddit = subreddit.top(limit=limit, time_filter=time_filter)
             for submission in top_subreddit:
                 if not submission.stickied:
-                    manager.add_posts(PostNum, subreddit.display_name, submission.title, submission.selftext,
+                    manager.add_posts(PostNum, subreddit.display_name, submission.title, submission.selftext, submission.url,
                                       (submission.ups - submission.downs), submission.author)
                     ##manager.add_User(submission.author, submission.author.comment_karma)
                     PostNum += 1
-                    print(PostNum)
+
         return manager
 
     def topofall(self):
