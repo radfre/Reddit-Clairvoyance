@@ -1,7 +1,7 @@
 from collections import Counter
 import re
+from nameparser import HumanName
 import nltk
-
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from textblob import TextBlob
@@ -45,16 +45,16 @@ class Postmanager:
                     cybrMention += 1
                     break  # exit loop once a synonym is found
 
-        return ('Total Posts: []\n'
+        return ('Total Posts: {}\n'
                 'Mentions of Cyberattacks:   {}\n'
                 'Mentions of Data Breaches:   {}'.format(len(self.posts), breachMention, cybrMention))
 
-    def TopBreachPost(self):
+    def TopBreachPosts(self):
         breach_posts = [post for post in self.posts if
                         any(synonym in post.title or synonym in post.desc for synonym in self.breach_synonyms)]
-        top_breach_post = max(breach_posts, key=lambda post: post.points)
-        return f"The top post with 'Breach' in the title or description has {top_breach_post.points} \n\tpoints and " \
-               f"is titled:   {top_breach_post.title}. "
+        sorted_breach_posts = sorted(breach_posts, key=lambda post: post.points, reverse=True)
+        top_breach_posts = sorted_breach_posts[:2]
+        return f"The top 2 posts with 'Breach' in the title or description are: \n1. {top_breach_posts[0].title} with {top_breach_posts[0].points} points\n2. {top_breach_posts[1].title} with {top_breach_posts[1].points} points"
 
     def TopCyberPost(self):
         cyber_posts = [post for post in self.posts if
@@ -77,20 +77,22 @@ class Postmanager:
         filtered_words = [word for word in words if word not in common_words and word not in bad_words]
         common_filtered_words = Counter(filtered_words).most_common(25)
 
-        return f"The top 10 most commonly used words are: {', '.join([word[0] for word in common_filtered_words])}"
+        return [word[0] for word in common_filtered_words]
 
-    def affectedOrgs(self):
+    def affected_orgs(self):
         orgs = set()
         for post in self.posts:
             if 'breach' in post.title.lower() or 'breach' in post.desc.lower():
                 # Identify affected organizations from the post's description or title
                 # and add them to the set
-                orgs.update(re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title))
+                orgs.update([str(HumanName(org.strip())) for org in
+                             re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title)])
             if 'cyber' in post.title.lower() or 'cyber' in post.desc.lower():
                 # Identify affected organizations from the post's description or title
                 # and add them to the set
-                orgs.update(re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title))
-        return 'The affected organizations are: ' + ', '.join(orgs)
+                orgs.update([str(HumanName(org.strip())) for org in
+                             re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title)])
+        return list(orgs)
 
     def SentimentResult(self):
         sentiments = []
@@ -100,8 +102,10 @@ class Postmanager:
             if sentiment <= -0.8:  # only show posts with negative sentiment score less than or equal to -0.5
                 sentiments.append((post.title, post.desc, sentiment))
         top_3 = sorted(sentiments, key=lambda x: x[2])[:3]  # sort in ascending order
-        return 'The top 5 most negative posts are: \n' + '\n'.join(
-            [f'Title: {post[0]}\nDescription: {post[1]}\nSentiment: {post[2]}' for post in top_3])
+        output_list = []
+        for post in top_3:
+            output_list.append(f'Title: {post[0]}\nDescription: {post[1]}\nSentiment: {post[2]}')
+        return output_list
 
 
 class Post:

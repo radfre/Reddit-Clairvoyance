@@ -13,29 +13,36 @@ class RedditAPI:
                            self.reddit.subreddit('hacking'), self.reddit.subreddit('malware'),
                            self.reddit.subreddit('threatintelligence'), self.reddit.subreddit('cybercrime'),
                            self.reddit.subreddit('antivirus')]
-    def GetPosts(self):
+
+    def GetPosts(self, limit=1000):
         manager = Postmanager()
-        PostNum=0
+        PostNum = 0
         for subreddit in self.subreddits:
-            top_subreddit = subreddit.hot(limit=1000)
-            for submission in top_subreddit:
-                if not submission.stickied:
-                    manager.add_posts(PostNum, subreddit.display_name, submission.title, submission.selftext, (submission.ups - submission.downs), submission.author)
-                    ##manager.add_User(submission.author, submission.author.comment_karma)
-                    PostNum+=1
+            after = None
+            while True:
+                top_subreddit = subreddit.hot(limit=limit, after=after)
+                for submission in top_subreddit:
+                    if not submission.stickied:
+                        manager.add_posts(PostNum, subreddit.display_name, submission.title, submission.selftext,
+                                          (submission.ups - submission.downs), submission.author)
+                        ##manager.add_User(submission.author, submission.author.comment_karma)
+                        PostNum += 1
+                    after = submission.id
+                if after is None:
+                    break
         return manager
 
-
-    def GetNewPosts(self):
+    def GetPosts(self, limit=1000, time_filter='month'):
         manager = Postmanager()
-        PostNum=0
+        PostNum = 0
         for subreddit in self.subreddits:
-            top_subreddit = subreddit.new(limit=1000)
+            top_subreddit = subreddit.top(limit=limit, time_filter=time_filter)
             for submission in top_subreddit:
                 if not submission.stickied:
-                    manager.add_posts(PostNum, subreddit.display_name, submission.title, submission.selftext, (submission.ups - submission.downs), submission.author)
+                    manager.add_posts(PostNum, subreddit.display_name, submission.title, submission.selftext,
+                                      (submission.ups - submission.downs), submission.author)
                     ##manager.add_User(submission.author, submission.author.comment_karma)
-                    PostNum+=1
+                    PostNum += 1
         return manager
 
     def topofall(self):

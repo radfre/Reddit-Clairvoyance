@@ -1,11 +1,16 @@
 from RedditAPI import RedditAPI
 from GUI import GUI
 from Postmanager import Postmanager
+from Login import LoginWindow
 
 ## read Credentials File
+login_window = LoginWindow()
+login_window.show()
 
-##login
-
+## Login to Reddit API
+reddit = RedditAPI(client_id=login_window.client_id,
+                   client_secret=login_window.client_secret,
+                   user_agent=login_window.user_agent)
 
 ## Begin API
 reddit = RedditAPI()
@@ -19,7 +24,7 @@ Postmanager = reddit.GetPosts()
 print(Postmanager.Mentions())
 print("")
 
-print(Postmanager.TopBreachPost())
+print(Postmanager.TopBreachPosts())
 print("")
 
 
@@ -31,7 +36,7 @@ print(Postmanager.PopularTerms())
 print("")
 
 
-print(Postmanager.affectedOrgs())
+print(Postmanager.affected_orgs())
 print("")
 
 
