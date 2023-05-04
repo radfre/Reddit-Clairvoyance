@@ -17,7 +17,29 @@ Display = GUI()
 Postmanager = reddit.GetPosts()
 
 print(Postmanager.Mentions())
+print("")
+
 print(Postmanager.TopBreachPost())
+print("")
+
+
 print(Postmanager.TopCyberPost())
+print("")
+
+
+print(Postmanager.PopularTerms())
+print("")
+
+
+print(Postmanager.affectedOrgs())
+print("")
+
+
+print(Postmanager.SentimentResult())
+print("")
+
+
+
+
 ##GUI
 

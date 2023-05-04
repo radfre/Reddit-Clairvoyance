@@ -25,6 +25,19 @@ class RedditAPI:
                     PostNum+=1
         return manager
 
+
+    def GetNewPosts(self):
+        manager = Postmanager()
+        PostNum=0
+        for subreddit in self.subreddits:
+            top_subreddit = subreddit.new(limit=1000)
+            for submission in top_subreddit:
+                if not submission.stickied:
+                    manager.add_posts(PostNum, subreddit.display_name, submission.title, submission.selftext, (submission.ups - submission.downs), submission.author)
+                    ##manager.add_User(submission.author, submission.author.comment_karma)
+                    PostNum+=1
+        return manager
+
     def topofall(self):
         Text = ""
         for subreddit in self.subreddits:

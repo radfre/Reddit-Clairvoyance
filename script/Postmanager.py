@@ -1,3 +1,12 @@
+from collections import Counter
+import re
+import nltk
+
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from textblob import TextBlob
+
+
 class Postmanager:
 
     def __init__(self):
@@ -36,8 +45,9 @@ class Postmanager:
                     cybrMention += 1
                     break  # exit loop once a synonym is found
 
-        return ('Mentions of Cyberattacks:   {}\n'
-                'Mentions of Data Breaches:   {}'.format(breachMention, cybrMention))
+        return ('Total Posts: []\n'
+                'Mentions of Cyberattacks:   {}\n'
+                'Mentions of Data Breaches:   {}'.format(len(self.posts), breachMention, cybrMention))
 
     def TopBreachPost(self):
         breach_posts = [post for post in self.posts if
@@ -56,6 +66,42 @@ class Postmanager:
     def TopUser(self):
         top_user = max(self.users, key=lambda user: user.points)
         return f"The top user is '{top_user.username}' with {top_user.points} points."
+
+    def PopularTerms(self):
+        all_text = ' '.join([f"{post.title} {post.desc}" for post in self.posts])
+        pattern = re.compile(r'\w+')
+        words = pattern.findall(all_text.lower())
+
+        common_words = set(stopwords.words('english'))
+        bad_words = {'bad'}
+        filtered_words = [word for word in words if word not in common_words and word not in bad_words]
+        common_filtered_words = Counter(filtered_words).most_common(25)
+
+        return f"The top 10 most commonly used words are: {', '.join([word[0] for word in common_filtered_words])}"
+
+    def affectedOrgs(self):
+        orgs = set()
+        for post in self.posts:
+            if 'breach' in post.title.lower() or 'breach' in post.desc.lower():
+                # Identify affected organizations from the post's description or title
+                # and add them to the set
+                orgs.update(re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title))
+            if 'cyber' in post.title.lower() or 'cyber' in post.desc.lower():
+                # Identify affected organizations from the post's description or title
+                # and add them to the set
+                orgs.update(re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title))
+        return 'The affected organizations are: ' + ', '.join(orgs)
+
+    def SentimentResult(self):
+        sentiments = []
+        for post in self.posts:
+            blob = TextBlob(post.desc)
+            sentiment = blob.sentiment.polarity
+            if sentiment <= -0.8:  # only show posts with negative sentiment score less than or equal to -0.5
+                sentiments.append((post.title, post.desc, sentiment))
+        top_3 = sorted(sentiments, key=lambda x: x[2])[:3]  # sort in ascending order
+        return 'The top 5 most negative posts are: \n' + '\n'.join(
+            [f'Title: {post[0]}\nDescription: {post[1]}\nSentiment: {post[2]}' for post in top_3])
 
 
 class Post:
