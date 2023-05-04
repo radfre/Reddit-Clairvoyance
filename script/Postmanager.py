@@ -94,19 +94,17 @@ class Postmanager:
                              re.findall(r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)', post.desc + post.title)])
         return list(orgs)
 
+    from textblob import TextBlob
+
     def SentimentResult(self):
         sentiments = []
         for post in self.posts:
             blob = TextBlob(post.desc)
             sentiment = blob.sentiment.polarity
-            if sentiment <= -0.8:  # only show posts with negative sentiment score less than or equal to -0.5
-                sentiments.append((post.title, post.desc, sentiment))
-        top_3 = sorted(sentiments, key=lambda x: x[2])[:3]  # sort in ascending order
-        output_list = []
-        for post in top_3:
-            output_list.append(f'Title: {post[0]}\nDescription: {post[1]}\nSentiment: {post[2]}')
-        return output_list
-
+            sentiments.append((post.title, post.desc, sentiment))
+        top_5 = sorted(sentiments, key=lambda x: x[2], reverse=True)[:5]
+        return 'The top 5 most aggressive posts are: \n' + '\n'.join(
+            [f'Title: {post[0]}\nDescription: {post[1]}\nSentiment: {post[2]}' for post in top_5])
 
 class Post:
     def __init__(self, Number, Subreddit, Title, Desc, Points, Username):

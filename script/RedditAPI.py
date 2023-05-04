@@ -14,25 +14,19 @@ class RedditAPI:
                            self.reddit.subreddit('threatintelligence'), self.reddit.subreddit('cybercrime'),
                            self.reddit.subreddit('antivirus')]
 
-    def GetPosts(self, limit=1000):
-        manager = Postmanager()
-        PostNum = 0
-        for subreddit in self.subreddits:
-            after = None
-            while True:
-                top_subreddit = subreddit.hot(limit=limit, after=after)
-                for submission in top_subreddit:
-                    if not submission.stickied:
-                        manager.add_posts(PostNum, subreddit.display_name, submission.title, submission.selftext,
-                                          (submission.ups - submission.downs), submission.author)
-                        ##manager.add_User(submission.author, submission.author.comment_karma)
-                        PostNum += 1
-                    after = submission.id
-                if after is None:
-                    break
-        return manager
+        def __init__(self, client_ID, client_secret,user_agent):
+            read = Read('../Credential.txt')
+            self.reddit = praw.Reddit(client_id=client_ID(),
+                                      client_secret=client_secret,
+                                      user_agent=user_agent, )
+            self.subreddits = [self.reddit.subreddit('cybersecurity'), self.reddit.subreddit('netsec'),
+                               self.reddit.subreddit('hacking'), self.reddit.subreddit('malware'),
+                               self.reddit.subreddit('threatintelligence'), self.reddit.subreddit('cybercrime'),
+                               self.reddit.subreddit('antivirus')]
 
-    def GetPosts(self, limit=1000, time_filter='month'):
+
+
+    def GetPosts(self, limit=20, time_filter='month'):
         manager = Postmanager()
         PostNum = 0
         for subreddit in self.subreddits:
@@ -43,6 +37,7 @@ class RedditAPI:
                                       (submission.ups - submission.downs), submission.author)
                     ##manager.add_User(submission.author, submission.author.comment_karma)
                     PostNum += 1
+                    print(PostNum)
         return manager
 
     def topofall(self):

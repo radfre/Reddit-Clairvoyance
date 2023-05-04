@@ -3,17 +3,19 @@ from GUI import GUI
 from Postmanager import Postmanager
 from Login import LoginWindow
 
-## read Credentials File
-login_window = LoginWindow()
-login_window.show()
+while True:
+    try:
+        login_window = LoginWindow()
+        login_window.show()
+        print('logging in....')
+        if login_window.client_secret:
+            reddit = RedditAPI(login_window.client_id, login_window.client_secret, login_window.user_agentasa)
+        else:
+            reddit = RedditAPI()
 
-## Login to Reddit API
-reddit = RedditAPI(client_id=login_window.client_id,
-                   client_secret=login_window.client_secret,
-                   user_agent=login_window.user_agent)
-
-## Begin API
-reddit = RedditAPI()
+        break
+    except:
+        print('Error: Failed to log in. Retrying in 5 seconds...')
 
 ##initialize GUI
 Display = GUI()
@@ -21,30 +23,23 @@ Display = GUI()
 ## Get Posts
 Postmanager = reddit.GetPosts()
 
-print(Postmanager.Mentions())
-print("")
+## Load data into GUI
+Display.loadMention(Postmanager.Mentions())
+Display.loadBreachPost(Postmanager.TopBreachPosts())
+Display.loadCyberPost(Postmanager.TopCyberPost())
+Display.loadPopTerm(Postmanager.PopularTerms())
+Display.loadAffeceted(Postmanager.affected_orgs())
+Display.loadSentient(Postmanager.SentimentResult())
 
-print(Postmanager.TopBreachPosts())
-print("")
-
-
-print(Postmanager.TopCyberPost())
-print("")
-
-
-print(Postmanager.PopularTerms())
-print("")
+## Run GUI
+Display.window.mainloop()
 
 
-print(Postmanager.affected_orgs())
-print("")
 
-
+# print(Postmanager.Mentions())
+# print(Postmanager.TopBreachPosts())
+# print(Postmanager.TopCyberPost())
+# print(Postmanager.PopularTerms())
+# print(Postmanager.affected_orgs())
 print(Postmanager.SentimentResult())
-print("")
-
-
-
-
-##GUI
 
