@@ -8,14 +8,11 @@ while True:
         login_window = LoginWindow()
         login_window.show()
         print('logging in....')
-        if login_window.client_secret:
-            reddit = RedditAPI(login_window.client_id, login_window.client_secret, login_window.user_agentasa)
-        else:
-            reddit = RedditAPI()
+        reddit = RedditAPI(login_window.client_id, login_window.client_secret, login_window.user_agent)
 
         break
-    except:
-        print('Error: Failed to log in. Retrying in 5 seconds...')
+    except Exception as e:
+        print(f'Error: Failed to log in. Retrying in 5 seconds... {e}')
 
 ##initialize GUI
 Display = GUI()
@@ -34,12 +31,9 @@ Display.loadSentient(Postmanager.SentimentResult())
 ## Run GUI
 Display.window.mainloop()
 
-
-
 # print(Postmanager.Mentions())
 # print(Postmanager.TopBreachPosts())
 # print(Postmanager.TopCyberPost())
 # print(Postmanager.PopularTerms())
 # print(Postmanager.affected_orgs())
-#print(Postmanager.SentimentResult())
-
+# print(Postmanager.SentimentResult())

@@ -58,7 +58,9 @@ class Postmanager:
         if not top_breach_posts:
             return "No posts found with 'Breach' in the title or description."
         elif len(top_breach_posts) == 1:
-            return f"The top post with 'Breach' in the title or description has {top_breach_posts[0].points} points:\n\n titled: {top_breach_posts[0].title}\n desc:{top_breach_posts[0].desc}\n\n\tReddit Link: {top_breach_posts[0].link}."
+            return f"The top post with 'Breach' in the title or description has {top_breach_posts[0].points} points" \
+                   f":\n\n titled: {top_breach_posts[0].title}\n desc:{top_breach_posts[0].desc}\n\n\tReddit" \
+                   f" Link: {top_breach_posts[0].link}. "
         else:
             return f"The top 2 posts with 'Breach' in the title or description are:\n\n\n1. {top_breach_posts[0].title}\nPoints: {top_breach_posts[0].points} \ndesc:{top_breach_posts[0].desc}\n\n\tReddit Link {top_breach_posts[0].link}\n\n\n\n2.\n {top_breach_posts[1].title}\n Points: {top_breach_posts[1].points} \ndesc:{top_breach_posts[1].desc}\n\nLink: {top_breach_posts[1].link}. "
 
@@ -70,7 +72,9 @@ class Postmanager:
         if not top_cyber_posts:
             return "No posts found with 'Cyber' in the title or description."
         elif len(top_cyber_posts) == 1:
-            return f"The top post with 'Cyber' in the title or description has {top_cyber_posts[0].points} points:\n titled: {top_cyber_posts[0].title}\n desc:{top_cyber_posts[0].desc}\n\n\tReddit Link {top_cyber_posts[0].link}."
+            return f"The top post with 'Cyber' in the title or description has {top_cyber_posts[0].points} points:\n " \
+                   f"titled: {top_cyber_posts[0].title}\n desc:{top_cyber_posts[0].desc}\n\n\tReddi" \
+                   f"t Link {top_cyber_posts[0].link}. "
         else:
             return f"The top 2 posts with 'Cyber' in the title or description are:\n\n\n1. {top_cyber_posts[0].title}\nPoints: {top_cyber_posts[0].points} \ndesc:{top_cyber_posts[0].desc}\n\n\tReddit Link {top_cyber_posts[0].link}\n\n\n\n2.\n {top_cyber_posts[1].title}\n Points: {top_cyber_posts[1].points} \ndesc:{top_cyber_posts[1].desc}\n\nLink: {top_cyber_posts[1].link}. "
 
@@ -87,7 +91,7 @@ class Postmanager:
         bad_words = {'bad'}
         filtered_words = [word for word in words if word not in common_words and word not in bad_words]
         common_filtered_words = Counter(filtered_words).most_common(25)
-        final =[word[0] for word in common_filtered_words]
+        final = [word[0] for word in common_filtered_words]
         final[:0] = ['Most Common Words\n']
         return final
 

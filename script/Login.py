@@ -1,6 +1,7 @@
 import tkinter as tk
 import praw
 
+
 class LoginWindow:
     def __init__(self):
         self.root = tk.Tk()
@@ -38,7 +39,6 @@ class LoginWindow:
                                   user_agent=self.user_agent)
         self.root.destroy()
 
-
     def getClientID(self):
         return self.client_id_entry.get()
 
@@ -47,4 +47,3 @@ class LoginWindow:
 
     def getUserAgent(self):
         return self.user_agent_entry.get()
-

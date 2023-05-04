@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 
+
 class GUI:
     def __init__(self):
         self.window = Tk()
@@ -45,7 +46,6 @@ class GUI:
 
         self.sentiment_text = Text(self.sentiment_tab, height=200, width=300)
         self.sentiment_text.pack(expand=1, fill="both", padx=10, pady=10)
-
 
     def loadMention(self, mentionText):
         self.mention_text.insert(END, mentionText)
