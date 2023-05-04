@@ -9,11 +9,13 @@ from GUI import GUI
 ## Begin API
 reddit = RedditAPI()
 
+##initialize GUI
+Display = GUI()
+
 ## begin Reddit API
 TopPosts = reddit.topofall()
 
 
 ##GUI
-Display = GUI()
 
 Display.display_top_posts(TopPosts)

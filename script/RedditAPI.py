@@ -17,5 +17,5 @@ class RedditAPI:
             top_subreddit = subreddit.hot(limit=2)
             for submission in top_subreddit:
                 if not submission.stickied:
-                    Text += ('sub: {}\tTitle: {}\t points: {}\n'.format(subreddit.display_name, submission.title, (submission.ups - submission.downs)))
+                    Text += ('sub: {}\t\tTitle: {}\n\t points: {}\n\n'.format(subreddit.display_name, submission.title, (submission.ups - submission.downs)))
         return Text
