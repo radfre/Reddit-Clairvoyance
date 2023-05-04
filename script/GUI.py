@@ -6,8 +6,8 @@ from tkinter.ttk import *
 class GUI:
     def __init__(self):
         self.window = Tk()
-        self.window.title("Reddit API App")
-        self.window.geometry("1000x600")
+        self.window.title("Reddit-Clairvoyance Dashboard")
+        self.window.geometry("1200x500")
 
         self.tabs = Notebook(self.window)
         self.mention_tab = Frame(self.tabs)
@@ -28,6 +28,37 @@ class GUI:
         self.tabs.add(self.sentiment_tab, text="Sentiment Analysis")
 
         self.tabs.pack(expand=1, fill="both")
+
+        # Adding description labels to each tab
+        mention_desc = "Total Posts Read and gits using synonyms with Cyber attacks and Data Breaches\n" \
+                       "Subreddis:cybersecurity, netsec, hacking, malware, threatintelligence, cybercrime, antivirus, " \
+                       "websecurity, blackhat, infosecurity, Privacy, Information_Security, intelligence, " \
+                       "ComputerSecurity "
+
+        breach_post_desc = "top 1 or 2 popular posts with the synonyms of Breach"
+        cyber_post_desc = "top 1 or 2 popular posts with the synonyms of Cyber Attack"
+        popular_term_desc = "Most popular terms in all queried posts"
+        affected_orgs_desc = "in posts where someone was breached this attempts to read possible names of people " \
+                             "organizations or things "
+        sentiment_desc = "Uses Sentiment analysis to find the most negative and nefarious posts, not 100%"
+
+        self.mention_label = Label(self.mention_tab, text=mention_desc)
+        self.mention_label.pack(side="top", pady=10)
+
+        self.breach_post_label = Label(self.breach_post_tab, text=breach_post_desc)
+        self.breach_post_label.pack(side="top", pady=10)
+
+        self.cyber_post_label = Label(self.cyber_post_tab, text=cyber_post_desc)
+        self.cyber_post_label.pack(side="top", pady=10)
+
+        self.popular_term_label = Label(self.popular_term_tab, text=popular_term_desc)
+        self.popular_term_label.pack(side="top", pady=10)
+
+        self.affected_orgs_label = Label(self.affected_orgs_tab, text=affected_orgs_desc)
+        self.affected_orgs_label.pack(side="top", pady=10)
+
+        self.sentiment_label = Label(self.sentiment_tab, text=sentiment_desc)
+        self.sentiment_label.pack(side="top", pady=10)
 
         self.mention_text = Text(self.mention_tab, height=200, width=300)
         self.mention_text.pack(expand=1, fill="both", padx=10, pady=10)

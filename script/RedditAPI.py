@@ -23,7 +23,7 @@ class RedditAPI:
                                self.reddit.subreddit('ComputerSecurity')]
 
 
-    def GetPosts(self, limit=10, time_filter='month'):
+    def GetPosts(self, limit=100, time_filter='year'):
         manager = Postmanager()
         PostNum = 0
         for subreddit in self.subreddits:
