@@ -7,15 +7,16 @@ from Read import Read
 read = Read('../Credential.txt')
 
 reddit = praw.Reddit(client_id=read.client_ID(),
-                     client_secret=read.client_secret(), password=read.password(),
-                     user_agent=read.user_agent(), username=read.user_name())
+                     client_secret=read.client_secret(),
+                     user_agent=read.user_agent(), )
 
 subreddit = reddit.subreddit('python')
-hot_python = subreddit.new()
-
-hot_python = subreddit.hot(limit=100)
+top_subreddit = subreddit.new()
+top_subreddit = subreddit.top(limit=1)
 n =0;
-for submission in hot_python:
+
+
+for submission in top_subreddit:
     if not submission.stickied:
         n += 1;
-        print('num: {} \n Title: {}\n\t ups: {}'.format(n, submission.title, submission.ups))
+        print('num: {} \n Title: {}\n\t points: {}'.format(n, submission.title, (submission.ups - submission.downs)))

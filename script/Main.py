@@ -1,3 +1,5 @@
+from RedditAPI import RedditAPI
+from GUI import GUI
 
 ## read Credentials File
 
@@ -5,7 +7,13 @@
 
 
 ## Begin API
+reddit = RedditAPI()
 
 ## begin Reddit API
+TopPosts = reddit.topofall()
 
-##PIPE
+
+##GUI
+Display = GUI()
+
+Display.display_top_posts(TopPosts)
