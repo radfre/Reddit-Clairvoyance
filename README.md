@@ -1,5 +1,5 @@
 # Reddit-Clairvoyance
-an open-source OSINT (Open-Source Intelligence) application that extracts data from Reddit posts, comments, and users. The app is built in Python and is designed to identify and track potential data breaches and cyber-attacks.
+An open-source OSINT (Open-Source Intelligence) application that extracts data from Reddit posts, comments, and users. The app is built in Python and is designed to identify and track potential data breaches and cyber-attacks.
 
 One of the key features of Reddit-Clairvoyance is its ability to identify and flag potentially malicious content. Through the use of natural language processing (NLP) the system can analyze posts to determine the likelihood of malicious intent or harmful behavior.
 
