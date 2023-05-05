@@ -1,7 +1,7 @@
 # Reddit-Clairvoyance
-USing OSINT Techniques To learn about Cyberattack Rates and topics while gathering a List of Users nad  posts processed thorough a natural language model to gauge malice or likelihood of malicious intent in the posts/comments.
+an open-source OSINT (Open-Source Intelligence) application that extracts data from Reddit posts, comments, and users. The app is built in Python and is designed to identify and track potential data breaches and cyber-attacks.
 
-One of the key features of Reddit-Clairvoyance is its ability to identify and flag potentially malicious content. Through the use of natural language processing (NLP) the system can analyze posts and comments to determine the likelihood of malicious intent or harmful behavior.
+One of the key features of Reddit-Clairvoyance is its ability to identify and flag potentially malicious content. Through the use of natural language processing (NLP) the system can analyze posts to determine the likelihood of malicious intent or harmful behavior.
 
 Features:
 
